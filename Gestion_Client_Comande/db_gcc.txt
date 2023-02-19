@@ -1,0 +1,96 @@
+CREATE DATABASE gcc_db;
+USE gcc_db;
+
+DROP TABLE IF EXISTS client;
+CREATE TABLE IF NOT EXISTS client (
+  Id INT NOT NULL AUTO_INCREMENT,
+  Nom VARCHAR(60) NOT NULL,
+  Prenom VARCHAR(60) NOT NULL,
+  Cin VARCHAR(60) NOT NULL,
+  Adress VARCHAR(100) NOT NULL,
+  Tel VARCHAR(60) NOT NULL,
+  Email VARCHAR(60) NOT NULL,
+  sexe VARCHAR(20) NOT NULL,
+  CONSTRAINT pk0 PRIMARY KEY (Id)
+);
+
+DROP TABLE IF EXISTS commande;
+CREATE TABLE IF NOT EXISTS commande (
+  Id INT NOT NULL AUTO_INCREMENT,
+  Id_Client INT  NULL,
+  DateCommane DATE,
+  CONSTRAINT pk1 PRIMARY KEY (Id),
+  CONSTRAINT fk0 FOREIGN KEY (Id_Client) REFERENCES client(Id)
+);
+
+DROP TABLE IF EXISTS Ligne_commande;
+CREATE TABLE IF NOT EXISTS  Ligne_commande (
+  Id INT NOT NULL AUTO_INCREMENT,
+  Id_Produit INT  NULL,
+  Qtt_Commander INT,
+  Id_Commande int,
+  CONSTRAINT pk1 PRIMARY KEY (Id),
+  CONSTRAINT fk11 FOREIGN KEY (Id_Produit) REFERENCES produit(Id),
+  CONSTRAINT fk10 FOREIGN KEY (Id_Commande) REFERENCES commande(Id)
+);
+
+DROP TABLE IF EXISTS produit;
+CREATE TABLE IF NOT EXISTS produit (
+  Id INT NOT NULL AUTO_INCREMENT,
+  Libelle VARCHAR(100) NOT NULL,
+  prix DOUBLE NOT NULL,
+  Qt_stock INT NOT NULL,
+  CONSTRAINT pk5 PRIMARY KEY (Id)
+);
+
+DROP TABLE IF EXISTS useer;
+CREATE TABLE IF NOT EXISTS useer (
+  Id INT NOT NULL AUTO_INCREMENT,
+  username VARCHAR(60) NOT NULL,
+  password VARCHAR(60) NOT NULL,
+  CONSTRAINT pk6 PRIMARY KEY (Id)
+) ;
+
+DROP TABLE IF EXISTS mnp_client;
+CREATE TABLE IF NOT EXISTS mnp_client (
+  Id INT NOT NULL AUTO_INCREMENT,
+  Id_Client INT DEFAULT NULL,
+  Id_User INT DEFAULT NULL,
+  date_MNP DATE DEFAULT NULL,
+  description VARCHAR(60),
+  CONSTRAINT pk2 PRIMARY KEY (Id),
+  CONSTRAINT fk1 FOREIGN KEY (Id_Client) REFERENCES client(Id),
+  CONSTRAINT fk2 FOREIGN KEY (Id_User) REFERENCES useer(Id)
+);
+
+DROP TABLE IF EXISTS mnp_commande;
+CREATE TABLE IF NOT EXISTS mnp_commande (
+  Id INT NOT NULL AUTO_INCREMENT,
+  Id_Commande INT DEFAULT NULL,
+  Id_User INT DEFAULT NULL,
+  date_MNP DATE DEFAULT NULL,
+  description VARCHAR(60),
+  CONSTRAINT pk3 PRIMARY KEY (Id),
+  CONSTRAINT fk3 FOREIGN KEY (Id_Commande) REFERENCES commande(Id),
+  CONSTRAINT fk4 FOREIGN KEY (Id_User) REFERENCES useer(Id)
+);
+
+DROP TABLE IF EXISTS mnp_produit;
+CREATE TABLE IF NOT EXISTS mnp_produit (
+  Id int NOT NULL AUTO_INCREMENT,
+  Id_Produit int DEFAULT NULL,
+  Id_User int DEFAULT NULL,
+  date_MNP DATE DEFAULT NULL,
+  description VARCHAR(60),
+  CONSTRAINT pk4 PRIMARY KEY (Id),
+  CONSTRAINT fk5 FOREIGN KEY (Id_Produit) REFERENCES produit(Id),
+  CONSTRAINT fk6 FOREIGN KEY (Id_User) REFERENCES useer(Id)
+);
+
+INSERT INTO `client`(`Nom`, `Prenom`, `Cin`, `Adress`, `Tel`, `Email`, `sexe`) VALUES ("HOUMADA","Oussama","H650017","Oujda","0654321234","oussamahoumada4@gmail.com","H"),
+("GEST","Gest","F135261","Paris","0665780987","mail@mail.com","F"),("GEST","Gest","F129876","Rabat","0610493867","mail@mail.com","H");
+INSERT INTO `produit`(`Libelle`, `prix`, `Qt_stock`) VALUES ("produit",100,15),
+("produit1",2500,20),("produit2",200,10),("produit3",150,25);
+INSERT INTO `commande`(`Id_Client`, `DateCommane`) VALUES (1,CURRENT_DATE),(2,"2021-06-17"),(2,"2021-06-07");
+INSERT INTO `ligne_commande`(`Id_Produit`, `Qtt_Commander`, `Id_Commande`) VALUES (1,4,1),(2,5,1),(3,3,1),(1,2,2),(2,3,2),(3,6,2);
+INSERT INTO `useer`(`username`, `password`) VALUES ("admin","admin"),("houmada","oussama");
